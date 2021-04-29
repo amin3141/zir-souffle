@@ -26,17 +26,22 @@ def main(args):
     init_db(cur)
 
     with open(args.input_file, encoding="utf8", errors="ignore") as infile:
-        for idx, line in enumerate(infile):
+        num_written = 0
+        for line in infile:
             parts = line.split("\t")
 
             doc_id = mmh3.hash128(line, 42, True)  # True is the x64 version
             date, title, text = parts[0], parts[1], parts[2]
+            if not text:  # Skip empty reviews
+                continue
+            num_written += 1
+
             hotel = os.path.basename(args.input_file)
             if hotel.startswith("usa_san_francisco"):
                 hotel = hotel[18:]
 
             json_doc = {
-                "documentId": doc_id,
+                "documentId": str(doc_id),
                 "title": title,
                 "metadataJson": '{"date": "%s", "hotel": "%s"}' % (date, hotel),
                 "section": [
@@ -44,12 +49,18 @@ def main(args):
                 ]
             }
             doc = json.dumps(json_doc, sort_keys=True, indent=4)
-            with open(os.path.join(args.output_dir, str(doc_id)), 'w') as outfile:
+
+            outfile = os.path.join(args.output_dir, str(doc_id)) + ".json"
+            with open(outfile, 'w') as outfile:
                 outfile.write(doc)
-                
-            cur.execute("insert into reviews values (?, ?, ?, ?, ?)",
+            
+            cur.execute("insert or ignore into reviews values (?, ?, ?, ?, ?)",
                         (str(doc_id), title, date, hotel, text))
-        print(f"Wrote {idx} reviews to {args.output_dir} and {args.sqlite_out}.")
+
+        print(f"Wrote {num_written} reviews to {args.output_dir} "
+              f"and {args.sqlite_out}.")
+        con.commit()
+        con.close()
 
 
 def init_db(cur):
