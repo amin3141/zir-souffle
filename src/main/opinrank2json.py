@@ -11,7 +11,7 @@ import sys
 
 def eprint(*args, **kwargs):
     """Print to stderr.
-    
+
     Ref: https://stackoverflow.com/questions/5574702/how-to-print-to-stderr-in-python
     """
     print(*args, file=sys.stderr, **kwargs)
@@ -53,7 +53,7 @@ def main(args):
             outfile = os.path.join(args.output_dir, str(doc_id)) + ".json"
             with open(outfile, 'w') as outfile:
                 outfile.write(doc)
-            
+
             cur.execute("insert or ignore into reviews values (?, ?, ?, ?, ?)",
                         (str(doc_id), title, date, hotel, text))
 
