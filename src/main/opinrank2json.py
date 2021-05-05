@@ -4,10 +4,11 @@
 import argparse
 import json
 import logging
-import mmh3
 import os
 import sqlite3
 import sys
+
+import mmh3
 
 def eprint(*args, **kwargs):
     """Print to stderr.
@@ -64,6 +65,7 @@ def main(args):
 
 
 def init_db(cur):
+    """Create the reviews table in the database."""
     cur.execute('''
         CREATE TABLE IF NOT EXISTS reviews (
             doc_id text primary key,
@@ -75,27 +77,26 @@ def init_db(cur):
 
 
 if __name__ == "__main__":
-  parser = argparse.ArgumentParser(
-      description="Extract OpinRank hotel reviews.")
+    parser = argparse.ArgumentParser(
+        description="Extract OpinRank hotel reviews.")
 
-  parser.add_argument("--input-file", dest="input_file",
-                      help="Location of the input file.",
-                      metavar="FILE")
-  parser.add_argument("--output-dir", dest="output_dir",
-                      default="./out",
-                      help="Location where hotel reviews will be exported as JSON.",
-                      metavar="DIR")
-  parser.add_argument("--sqlite", dest="sqlite_out",
-                      default="./out/reviews.db",
-                      help="Database file for hotel reviews.",
-                      metavar="FILE")
-  args = parser.parse_args()
+    parser.add_argument("--input-file", dest="input_file",
+                        help="Location of the input file.",
+                        metavar="FILE")
+    parser.add_argument("--output-dir", dest="output_dir",
+                        default="./out",
+                        help="Location where hotel reviews will be exported as JSON.",
+                        metavar="DIR")
+    parser.add_argument("--sqlite", dest="sqlite_out",
+                        default="./out/reviews.db",
+                        help="Database file for hotel reviews.",
+                        metavar="FILE")
+    args = parser.parse_args()
 
-  root = logging.getLogger()
-  root.setLevel(logging.DEBUG)
+    root = logging.getLogger()
+    root.setLevel(logging.DEBUG)
 
-  logging.basicConfig(
-      format="%(asctime)s %(thread)-4d:%(levelname)-8s %(message)s",
-      level=logging.INFO)
-  main(args)
-
+    logging.basicConfig(
+        format="%(asctime)s %(thread)-4d:%(levelname)-8s %(message)s",
+        level=logging.INFO)
+    main(args)
