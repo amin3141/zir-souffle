@@ -61,7 +61,7 @@ class HotelShell(cmd.Cmd):
                 }
             ]
         }
-        """ % (line, self.customer_id, self.corpus_id)
+        """ % (line.replace('"', '\\"'), self.customer_id, self.corpus_id)
 
         # Send the request to the server.
         start_time = timeit.default_timer()
