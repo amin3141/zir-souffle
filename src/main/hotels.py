@@ -74,7 +74,7 @@ class HotelShell(cmd.Cmd):
             data=data)
         elapsed = timeit.default_timer() - start_time
         if response.status_code != 200:
-            print("Server returned status code %d.", response.status_code)
+            print("Server returned status code %d." % response.status_code)
         else:
             results = json.loads(
                 response.text, object_hook=lambda d: SimpleNamespace(**d))
@@ -224,16 +224,16 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description="Search hotel reviews for information.")
 
-    parser.add_argument("--customer-id", dest="customer_id",
+    parser.add_argument("--customer-id", dest="customer_id", required=True,
                         help="Customer ID.",
                         metavar="ID")
-    parser.add_argument("--corpus-id", dest="corpus_id",
+    parser.add_argument("--corpus-id", dest="corpus_id", required=True,
                         help="Corpus ID.",
                         metavar="ID")
-    parser.add_argument("--app-client-id", dest="app_id",
+    parser.add_argument("--app-client-id", dest="app_id", required=True,
                         help="App Client ID.",
                         metavar="ID")
-    parser.add_argument("--auth-domain", dest="auth_domain",
+    parser.add_argument("--auth-domain", dest="auth_domain", required=True,
                         help="Authentication domain.",
                         metavar="URL")
     parser.add_argument("--sqlite", dest="sqlite_out",
