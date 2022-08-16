@@ -1,6 +1,11 @@
 #!/usr/bin/env python3
 """A simple command line interface for running queries against hotel reviews.
 
+Install the following packages if they are not yet available. For example:
+    pip3 install authlib
+    pip3 install colorama
+    pip3 install requests
+
 The following command line shows how to invoke the program. You can find your
 Customer ID in the upper right corner of the admin console when you are logged
 in. The Corpus ID is found by clicking the corpus containing the hotel reviews.
